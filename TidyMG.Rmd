@@ -1,0 +1,70 @@
+---
+title: "TidyverseMG"
+author: ""
+date: "10/25/2020"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+```{r}
+knitr::opts_chunk$set(echo = TRUE)
+
+```
+
+## Tidyverse CREATE assignment
+
+The purpose of this assignment is to collaborate around a code project with GitHub.  We are to build an example on how to use TidyVerse functions.
+
+Our task is to create a "vignette" that demonstrates how to use one or more of the capabilities of a selected TidyVerse package with a dataset from fivethirtyeight.com or Kaggle.
+
+
+##The first step is to load TidyVerse.
+
+```{r}
+library(tidyverse)
+```
+
+
+##The next step is to read the csv file from fivethirtyeight.com and take a look at the data.
+
+The file is located at: https://raw.githubusercontent.com/fivethirtyeight/data/master/police-locals/police-locals.csv
+
+```{r}
+
+df <- read.csv("https://raw.githubusercontent.com/fivethirtyeight/data/master/police-locals/police-locals.csv", header = TRUE)
+head(df, 10)
+tail(df, 10)
+
+```
+The data from fivethirtyeight.com is the residence of police officers for the 75 largest police forces in the US (except for Honolulu).  The data is further broken down by the officer's race.  
+
+We can further see that we have some missing data signified by "**" where there are less than 100 police officers of that race in the police force.
+
+
+
+## Remove unneeded columns
+
+For this data set, I decided to remove the specific races to just focus on white and non-white officers as the data towards the bottom of the list had too many missing data points to be helpful.
+
+In TidyVerse, the select(dataframe, -c(columns)) function will allow us to remove the unwanted columns.
+
+```{r}
+df2 <- select(df, -c(black, hispanic, asian))
+df2
+
+```
+
+Next we'll use a bar chart to show the percentage of all officers who live in the city they protect.  We will use the reorder() function to put the highest percentages at the top.  And we'll add a blue backgroud around the barchart with the element_rect() function.
+
+```{r}
+ggplot(df2, aes(x = all, y = reorder(city, all))) +
+  geom_bar(stat='identity') +
+  theme_bw(base_size = 4.5) +
+  theme(plot.background = element_rect(color = "blue", size = 2)) 
+
+
+```
+
+
+
